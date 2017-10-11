@@ -26,10 +26,10 @@ const FilesystemStorage = {
   setItem: (
     key: string,
     value: string,
-    callback: (error: ?Error) => void,
+    callback?: (error: ?Error) => void,
   ) =>
     RNFetchBlob.fs.writeFile(pathForKey(key), value, options.encoding)
-      .then(() => callback())
+      .then(() => callback && callback())
       .catch(error => callback(error && error)),
 
   getItem: (
@@ -37,16 +37,25 @@ const FilesystemStorage = {
     callback: (error: ?Error, result: ?string) => void
   ) =>
     RNFetchBlob.fs.readFile(pathForKey(options.toFileName(key)), options.encoding)
-      .then(data => callback(null, data))
-      .catch(error => callback(error)),
+      .then(data => {
+        callback && callback(null, data)
+        if (!callback) return data
+      })
+      .catch(error => {
+        callback && callback(error)
+        if (!callback) throw error
+      }),
 
   removeItem: (
     key: string,
     callback: (error: ?Error) => void,
   ) =>
     RNFetchBlob.fs.unlink(pathForKey(options.toFileName(key)))
-      .then(() => callback())
-      .catch(error => callback(error)),
+      .then(() => callback && callback())
+      .catch(error => {
+        callback && callback(error)
+        if (!callback) throw error
+      }),
 
   getAllKeys: (
     callback: (error: ?Error, keys: ?Array<string>) => void,
@@ -58,9 +67,15 @@ const FilesystemStorage = {
     .then(() =>
       RNFetchBlob.fs.ls(options.storagePath)
         .then(files => files.map(file => options.fromFileName(file)))
-        .then(files => callback(null, files))
+        .then(files => {
+          callback && callback(null, files)
+          if (!callback) return files
+        })
     )
-    .catch(error => callback(error)),
+    .catch(error => {
+      callback && callback(error)
+      if (!callback) throw error
+    }),
 }
 
 export default FilesystemStorage
