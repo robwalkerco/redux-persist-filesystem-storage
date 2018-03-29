@@ -51,5 +51,44 @@ persistStore(
     },
   )
 )
+```
 
+## migration from previous storage
+
+**tested with redux-persist v4**
+
+the snippet below lets you migrate redux data previously stored in
+`AsyncStorage` to `redux-persist-filesystem-storage`.
+
+**NOTE** This snippet lets you migrate _healthy_ data. It _will not restore_
+data if it is already hit limits of `AsyncStorage`
+
+```javascript
+import { persistStore, getStoredState } from 'redux-persist'
+import FilesystemStorage from 'redux-persist-filesystem-storage'
+import { AsyncStorage } from 'react-native'
+import _ from 'lodash'
+import { createStore } from 'redux'
+
+const store = createStore(...)
+
+// create persistor for `redux-persist-filesystem-storage`
+const fsPersistor = persistStore(
+  store,
+  { storage: FilesystemStorage },
+  async (fsError, fsResult) => {
+    if (_.isEmpty(fsResult)) {
+      // if state from fs storage is empty try to read state from previous storage
+      try {
+        const asyncState = await getStoredState({ storage: AsyncStorage })
+        if (!_.isEmpty(asyncState)) {
+          // if data exists in `AsyncStorage` - rehydrate fs persistor with it
+          fsPersistor.rehydrate(asyncState, { serial: false })
+        }
+      } catch (getStateError) {
+        console.warn("getStoredState error", getStateError)
+      }
+    }
+  }
+)
 ```
