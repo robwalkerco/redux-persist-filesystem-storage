@@ -78,4 +78,26 @@ const FilesystemStorage = {
     }),
 }
 
+FilesystemStorage.clear = (
+  callback: (error: ?Error) => void,
+) =>
+  FilesystemStorage.getAllKeys((error, keys) => {
+    if (error) throw error
+
+    if (Array.isArray(keys) && keys.length) {
+      keys.forEach(key => {
+        FilesystemStorage.removeItem(key)
+      })
+
+      callback && callback(null, true)
+      return true
+    }
+
+    callback && callback(null, false)
+    return false
+  }).catch(error => {
+    callback && callback(error)
+    if (!callback) throw error
+  })
+
 export default FilesystemStorage
