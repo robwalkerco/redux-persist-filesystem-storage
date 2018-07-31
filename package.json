@@ -10,6 +10,6 @@
   "author": "Rob Walker",
   "license": "MIT",
   "dependencies": {
-    "react-native-fetch-blob": "^0.10.0"
+    "rn-fetch-blob": "^0.10.0"
   }
 }
