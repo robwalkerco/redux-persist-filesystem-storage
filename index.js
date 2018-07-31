@@ -2,7 +2,7 @@
 * @flow
 */
 
-import RNFetchBlob from 'react-native-fetch-blob'
+import RNFetchBlob from 'rn-fetch-blob'
 
 let options = {
   storagePath: `${RNFetchBlob.fs.dirs.DocumentDir}/persistStore`,
