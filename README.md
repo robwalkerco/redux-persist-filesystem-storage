@@ -12,11 +12,11 @@ This storage can be used on Android to prevent issues with the storage limitatio
 yarn add redux-persist-filesystem-storage
 ```
 
-Then, as [react-native-fetch-blob](https://github.com/wkh237/react-native-fetch-blob) is a dependency of this project, we need to ensure its linked with
+Then, as [rn-fetch-blob](https://github.com/joltup/rn-fetch-blob) is a dependency of this project, we need to ensure its linked with
 ```
-react-native link react-native-fetch-blob
+react-native link rn-fetch-blob
 ```
-(or check [their docs](https://github.com/wkh237/react-native-fetch-blob#user-content-installation)).
+(or check [their docs](https://github.com/joltup/rn-fetch-blob#user-content-installation)).
 
 ## usage
 ```javascript
