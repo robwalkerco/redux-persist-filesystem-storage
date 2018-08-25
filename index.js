@@ -78,26 +78,27 @@ const FilesystemStorage = {
     }),
 }
 
-FilesystemStorage.clear = (
-  callback: (error: ?Error) => void,
-) =>
+FilesystemStorage.clear = (callback: (error: ?Error) => void) =>
   FilesystemStorage.getAllKeys((error, keys) => {
-    if (error) throw error
+    if (error) throw error;
 
     if (Array.isArray(keys) && keys.length) {
+      const removedKeys = [];
       keys.forEach(key => {
-        FilesystemStorage.removeItem(key)
-      })
-
-      callback && callback(null, true)
-      return true
+        FilesystemStorage.removeItem(key, (error: ?Error) => {
+          if (error && callback) callback(error, false);
+          removedKeys.push(key);
+          if (removedKeys.length === keys.length && callback) callback(null, true);
+        });
+      });
+      return true;
     }
 
-    callback && callback(null, false)
-    return false
+    callback && callback(null, false);
+    return false;
   }).catch(error => {
-    callback && callback(error)
-    if (!callback) throw error
-  })
+    callback && callback(error);
+    if (!callback) throw error;
+  });
 
 export default FilesystemStorage
