@@ -85,11 +85,14 @@ FilesystemStorage.clear = (
     if (error) throw error
 
     if (Array.isArray(keys) && keys.length) {
-      keys.forEach(key => {
-        FilesystemStorage.removeItem(key)
-      })
+      const removedKeys = []
 
-      callback && callback(null, true)
+      keys.forEach(key => {
+        FilesystemStorage.removeItem(key, (error: ?Error) => {
+          removedKeys.push(key)
+          if (error && callback) callback(error, false)
+          if (removedKeys.length === keys.length && callback) callback(null, true)
+        })
       return true
     }
 
