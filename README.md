@@ -55,7 +55,11 @@ persistStore(
 
 ## migration from previous storage
 
-**tested with redux-persist v4**
+**Using redux-persist V5?**
+
+[Redux-Persist v5 migrate from one storage system to another](https://github.com/rt2zz/redux-persist/issues/806#issuecomment-425838924)
+
+**Using redux-persist V4?**
 
 the snippet below lets you migrate redux data previously stored in
 `AsyncStorage` to `redux-persist-filesystem-storage`.
