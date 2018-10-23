@@ -47,6 +47,7 @@ const persistConfig = {
 }
 
 ...
+```
 
 ## migration from previous storage
 
