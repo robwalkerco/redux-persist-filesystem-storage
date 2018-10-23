@@ -19,7 +19,7 @@ react-native link rn-fetch-blob
 (or check [their docs](https://github.com/joltup/rn-fetch-blob#user-content-installation)).
 
 ## usage
-Simple specify to use 'FilesystemStorage' as the storage option in the redux-persist config.
+Simply use 'FilesystemStorage' as the storage option in the redux-persist config.
 ```javascript
 import FilesystemStorage from 'redux-persist-filesystem-storage'
 ...
