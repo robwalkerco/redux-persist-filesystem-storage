@@ -19,39 +19,34 @@ react-native link rn-fetch-blob
 (or check [their docs](https://github.com/joltup/rn-fetch-blob#user-content-installation)).
 
 ## usage
+Simply use 'FilesystemStorage' as the storage option in the redux-persist config.
 ```javascript
 import FilesystemStorage from 'redux-persist-filesystem-storage'
-import { persistStore, autoRehydrate } from 'redux-persist'
+...
 
-const store = createStore(reducer, undefined, autoRehydrate())
+const persistConfig = {
+  key: 'root',
+  storage: FilesystemStorage,
+}
 
-persistStore(
-  store,
-  {
-    storage: FilesystemStorage,
-  },
-)
+...
 ```
 
 ## usage with custom options
 ```javascript
-import RNFetchBlob from 'react-native-fetch-blob'
 import FilesystemStorage from 'redux-persist-filesystem-storage'
-import { persistStore, autoRehydrate } from 'redux-persist'
+...
 
-const store = createStore(reducer, undefined, autoRehydrate())
+FilesystemStorage.config({
+     storagePath: `${RNFetchBlob.fs.dirs.DocumentDir}/persistStore`
+});
 
-persistStore(
-  store,
-  {
-    storage: FilesystemStorage.config(
-      {
-        storagePath: `${RNFetchBlob.fs.dirs.DocumentDir}/persistStore`,
-      },
-    },
-  )
-)
-```
+const persistConfig = {
+  key: 'root',
+  storage: FilesystemStorage,
+}
+
+...
 
 ## migration from previous storage
 
