@@ -4,12 +4,28 @@
 
 import RNFetchBlob from 'rn-fetch-blob'
 
+const createStoragePathIfNeeded = path =>
+  RNFetchBlob.fs.exists(path).then(exists => {
+    return exists
+      ? new Promise(resolve => resolve(true))
+      : RNFetchBlob.fs.mkdir(path);
+  });
+const onStorageReadyFactory = (storagePath) => {
+  return (func) => {
+    const storage = createStoragePathIfNeeded(storagePath);
+    return (...args) => storage.then(() => func(...args));
+  }
+};
+
+const defaultStoragePath = `${RNFetchBlob.fs.dirs.DocumentDir}/persistStore`
+
+let onStorageReady = onStorageReadyFactory(defaultStoragePath);
 let options = {
-  storagePath: `${RNFetchBlob.fs.dirs.DocumentDir}/persistStore`,
+  storagePath: defaultStoragePath,
   encoding: 'utf8',
   toFileName: (name: string) => name.split(':').join('-'),
   fromFileName: (name: string) => name.split('-').join(':'),
-}
+};
 
 const pathForKey = (key: string) => `${options.storagePath}/${options.toFileName(key)}`
 
@@ -21,6 +37,7 @@ const FilesystemStorage = {
       ...options,
       ...customOptions,
     }
+    onStorageReady = onStorageReadyFactory(options.storagePath);
   },
 
   setItem: (
@@ -32,19 +49,36 @@ const FilesystemStorage = {
       .then(() => callback && callback())
       .catch(error => callback && callback(error)),
 
-  getItem: (
+  getItem: onStorageReady((
     key: string,
     callback: (error: ?Error, result: ?string) => void
-  ) =>
-    RNFetchBlob.fs.readFile(pathForKey(options.toFileName(key)), options.encoding)
+  ) => {
+    const filePath = pathForKey(options.toFileName(key));
+
+    return RNFetchBlob.fs.readFile(filePath, options.encoding)
       .then(data => {
         callback && callback(null, data)
         if (!callback) return data
       })
       .catch(error => {
-        callback && callback(error)
-        if (!callback) throw error
-      }),
+        return RNFetchBlob.fs
+          .exists(filePath)
+          .then(exists => {
+            if (exists) {
+              // The error is not related to the existence of the file
+              callback && callback(error);
+              if (!callback) throw error;
+            }
+
+            return '';
+          })
+          .catch(() => {
+            // We throw the original error
+            callback && callback(error);
+            if (!callback) throw error;
+          });
+      });
+  }),
 
   removeItem: (
     key: string,
@@ -61,21 +95,21 @@ const FilesystemStorage = {
     callback: (error: ?Error, keys: ?Array<string>) => void,
   ) =>
     RNFetchBlob.fs.exists(options.storagePath)
-    .then(exists =>
-      exists ? true : RNFetchBlob.fs.mkdir(options.storagePath)
-    )
-    .then(() =>
-      RNFetchBlob.fs.ls(options.storagePath)
-        .then(files => files.map(file => options.fromFileName(file)))
-        .then(files => {
-          callback && callback(null, files)
-          if (!callback) return files
-        })
-    )
-    .catch(error => {
-      callback && callback(error)
-      if (!callback) throw error
-    }),
+      .then(exists =>
+        exists ? true : RNFetchBlob.fs.mkdir(options.storagePath)
+      )
+      .then(() =>
+        RNFetchBlob.fs.ls(options.storagePath)
+          .then(files => files.map(file => options.fromFileName(file)))
+          .then(files => {
+            callback && callback(null, files)
+            if (!callback) return files
+          })
+      )
+      .catch(error => {
+        callback && callback(error)
+        if (!callback) throw error
+      }),
 }
 
 FilesystemStorage.clear = (
