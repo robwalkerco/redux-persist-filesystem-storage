@@ -17,19 +17,19 @@ declare module 'redux-persist-filesystem-storage' {
 
     getItem: (
       key: string,
-      callback: (error?: Error, result?: string) => void,
+      callback?: (error?: Error, result?: string) => void,
     ) => Promise<string | undefined>
 
     removeItem: (
       key: string,
-      callback: (error?: Error) => void,
+      callback?: (error?: Error) => void,
     ) => Promise<undefined>
 
     getAllKeys: (
-      callback: (error?: Error, keys?: Array<string>) => void,
+      callback?: (error?: Error, keys?: Array<string>) => void,
     ) => Promise<string[]> | Promise<undefined>
 
-    clear: (callback: (error?: Error) => void) => Promise<boolean>
+    clear: (callback?: (error?: Error) => void) => Promise<boolean>
   }
 
   export default FilesystemStorage
