@@ -1,6 +1,6 @@
 {
   "name": "redux-persist-filesystem-storage",
-  "version": "1.4.1",
+  "version": "2.0.0",
   "description": "Redux persist adaptor for React Native filesystem storage",
   "main": "index.js",
   "repository": {
@@ -10,6 +10,6 @@
   "author": "Rob Walker",
   "license": "MIT",
   "dependencies": {
-    "rn-fetch-blob": "0.10.15"
+    "rn-fetch-blob": "^0.10.16"
   }
 }
