@@ -48,7 +48,7 @@ const FilesystemStorage = {
       .catch(error => callback && callback(error)),
 
   getItem: onStorageReady(
-    (key: string, callback: (error: ?Error, result: ?(Array<number> | string)) => void) => {
+    (key: string, callback?: (error: ?Error, result: ?(Array<number> | string)) => void) => {
       const filePath = pathForKey(options.toFileName(key));
 
       return RNFetchBlob.fs
@@ -84,7 +84,7 @@ const FilesystemStorage = {
     }
   ),
 
-  removeItem: (key: string, callback: (error: ?Error) => void) =>
+  removeItem: (key: string, callback?: (error: ?Error) => void) =>
     RNFetchBlob.fs
       .unlink(pathForKey(options.toFileName(key)))
       .then(() => callback && callback())
@@ -95,7 +95,7 @@ const FilesystemStorage = {
         }
       }),
 
-  getAllKeys: (callback: (error: ?Error, keys: ?Array<string>) => any) =>
+  getAllKeys: (callback?: (error: ?Error, keys: ?Array<string>) => any) =>
     RNFetchBlob.fs
       .exists(options.storagePath)
       .then(exists =>
@@ -122,7 +122,7 @@ const FilesystemStorage = {
     clear: undefined // Workaround for Flow error coming from `clear` not being part of object literal
 };
 
-FilesystemStorage.clear = (callback: (error: ?Error, allKeysCleared: boolean | void) => void) =>
+FilesystemStorage.clear = (callback?: (error: ?Error, allKeysCleared: boolean | void) => void) =>
   FilesystemStorage.getAllKeys((error, keys) => {
     if (error) throw error;
 
