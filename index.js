@@ -13,10 +13,10 @@ const createStoragePathIfNeeded = path =>
         : RNFetchBlob.fs.mkdir(path)
     );
 
-const onStorageReadyFactory = storagePath => func => {
+const onStorageReadyFactory = (storagePath: string) => (func: Function) => {
   const storage = createStoragePathIfNeeded(storagePath);
 
-  return (...args) => storage.then(() => func(...args));
+  return (...args: Array<any>) => storage.then(() => func(...args));
 };
 
 const defaultStoragePath = `${RNFetchBlob.fs.dirs.DocumentDir}/persistStore`;
@@ -48,7 +48,7 @@ const FilesystemStorage = {
       .catch(error => callback && callback(error)),
 
   getItem: onStorageReady(
-    (key: string, callback: (error: ?Error, result: ?string) => void) => {
+    (key: string, callback: (error: ?Error, result: ?(Array<number> | string)) => void) => {
       const filePath = pathForKey(options.toFileName(key));
 
       return RNFetchBlob.fs
@@ -95,7 +95,7 @@ const FilesystemStorage = {
         }
       }),
 
-  getAllKeys: (callback: (error: ?Error, keys: ?Array<string>) => void) =>
+  getAllKeys: (callback: (error: ?Error, keys: ?Array<string>) => any) =>
     RNFetchBlob.fs
       .exists(options.storagePath)
       .then(exists =>
@@ -104,7 +104,7 @@ const FilesystemStorage = {
       .then(() =>
         RNFetchBlob.fs
           .ls(options.storagePath)
-          .then(files => files.map(file => options.fromFileName(file)))
+          .then(files => files.map<string>(file => options.fromFileName(file)))
           .then(files => {
             callback && callback(null, files);
             if (!callback) {
@@ -117,10 +117,12 @@ const FilesystemStorage = {
         if (!callback) {
           throw error;
         }
-      })
+      }),
+
+    clear: undefined // Workaround for Flow error coming from `clear` not being part of object literal
 };
 
-FilesystemStorage.clear = (callback: (error: ?Error) => void) =>
+FilesystemStorage.clear = (callback: (error: ?Error, allKeysCleared: boolean | void) => void) =>
   FilesystemStorage.getAllKeys((error, keys) => {
     if (error) throw error;
 
