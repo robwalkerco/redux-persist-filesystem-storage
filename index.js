@@ -48,7 +48,7 @@ const FilesystemStorage = {
       .catch(error => callback && callback(error)),
 
   getItem: onStorageReady(
-    (key: string, callback: (error: ?Error, result: ?string) => void) => {
+    (key: string, callback?: (error: ?Error, result: ?string) => void) => {
       const filePath = pathForKey(options.toFileName(key));
 
       return RNFetchBlob.fs
@@ -84,7 +84,7 @@ const FilesystemStorage = {
     }
   ),
 
-  removeItem: (key: string, callback: (error: ?Error) => void) =>
+  removeItem: (key: string, callback?: (error: ?Error) => void) =>
     RNFetchBlob.fs
       .unlink(pathForKey(options.toFileName(key)))
       .then(() => callback && callback())
@@ -95,7 +95,7 @@ const FilesystemStorage = {
         }
       }),
 
-  getAllKeys: (callback: (error: ?Error, keys: ?Array<string>) => void) =>
+  getAllKeys: (callback?: (error: ?Error, keys: ?Array<string>) => void) =>
     RNFetchBlob.fs
       .exists(options.storagePath)
       .then(exists =>
@@ -120,7 +120,7 @@ const FilesystemStorage = {
       })
 };
 
-FilesystemStorage.clear = (callback: (error: ?Error) => void) =>
+FilesystemStorage.clear = (callback?: (error: ?Error) => void) =>
   FilesystemStorage.getAllKeys((error, keys) => {
     if (error) throw error;
 
