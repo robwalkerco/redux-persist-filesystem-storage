@@ -59,28 +59,12 @@ const FilesystemStorage = {
             return data;
           }
         })
-        .catch(error =>
-          RNFetchBlob.fs
-            .exists(filePath)
-            .then(exists => {
-              if (exists) {
-                // The error is not related to the existence of the file
-                callback && callback(error);
-                if (!callback) {
-                  throw error;
-                }
-              }
-
-              return "";
-            })
-            .catch(() => {
-              // We throw the original error
-              callback && callback(error);
-              if (!callback) {
-                throw error;
-              }
-            })
-        );
+        .catch(error => {
+          callback && callback(error);
+          if (!callback) {
+            throw error;
+          }
+        });
     }
   ),
 
