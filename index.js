@@ -54,30 +54,52 @@ const FilesystemStorage = {
       return RNFetchBlob.fs
         .readFile(filePath, options.encoding)
         .then(data => {
-          callback && callback(null, data);
           if (!callback) {
             return data;
           }
+          callback(null, data);
         })
-        .catch(error => {
-          callback && callback(error);
-          if (!callback) {
-            throw error;
-          }
+        .catch(err => {
+          return RNFetchBlob.fs
+            .exists(filePath)
+            .then(exists => {
+              if (!exists) {
+                return null;
+              } else {
+                if (!callback) {
+                  throw err;
+                }
+                callback(err);
+              }
+            })
         });
     }
   ),
 
-  removeItem: (key: string, callback?: (error: ?Error) => void) =>
-    RNFetchBlob.fs
-      .unlink(pathForKey(options.toFileName(key)))
-      .then(() => callback && callback())
-      .catch(error => {
-        callback && callback(error);
-        if (!callback) {
-          throw error;
+  removeItem: (key: string, callback?: (error: ?Error) => void) => {
+    const filePath = pathForKey(options.toFileName(key));
+
+    const handleError = err => {
+      if (!callback) {
+        throw err;
+      }
+      callback(err);
+    }
+
+    return RNFetchBlob.fs
+      .exists(filePath)
+      .then(exists => {
+        if (!exists) {
+          return null;
+        } else {
+          return RNFetchBlob.fs
+            .unlink(filePath)
+            .then(() => callback && callback())
+            .catch(handleError);
         }
-      }),
+      })
+      .catch(handleError);
+  },
 
   getAllKeys: (callback?: (error: ?Error, keys: ?Array<string>) => any) =>
     RNFetchBlob.fs
@@ -103,7 +125,7 @@ const FilesystemStorage = {
         }
       }),
 
-    clear: undefined // Workaround for Flow error coming from `clear` not being part of object literal
+  clear: undefined // Workaround for Flow error coming from `clear` not being part of object literal
 };
 
 FilesystemStorage.clear = (callback?: (error: ?Error, allKeysCleared: boolean | void) => void) =>
