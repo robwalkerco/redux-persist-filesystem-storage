@@ -22,13 +22,17 @@ yarn add redux-persist-filesystem-storage@1
 ```
 
 Then, as [rn-fetch-blob](https://github.com/joltup/rn-fetch-blob) is a dependency of this project, we need to ensure its linked with
+
 ```
 react-native link rn-fetch-blob
 ```
+
 (or check [their docs](https://github.com/joltup/rn-fetch-blob#user-content-installation)).
 
 ## usage
+
 Simply use 'FilesystemStorage' as the storage option in the redux-persist config.
+
 ```javascript
 import FilesystemStorage from 'redux-persist-filesystem-storage'
 ...
@@ -42,17 +46,24 @@ const persistConfig = {
 ```
 
 ## usage with custom options
+
 ```javascript
 import FilesystemStorage from 'redux-persist-filesystem-storage'
 ...
 
+// These are all the config options, with their default values
 FilesystemStorage.config({
-     storagePath: `${RNFetchBlob.fs.dirs.DocumentDir}/persistStore`
+     storagePath: `${RNFetchBlob.fs.dirs.DocumentDir}/persistStore`,
+     encoding: "utf8",
+     toFileName: (name: string) => name.split(":").join("-"),
+     fromFileName: (name: string) => name.split("-").join(":"),
 });
 
 const persistConfig = {
   key: 'root',
   storage: FilesystemStorage,
+  toFileName: (name: string) => name.split(":").join("-"),
+  fromFileName: (name: string) => name.split("-").join(":")
 }
 
 ...
