@@ -79,10 +79,10 @@ path-is-absolute@^1.0.0:
   resolved "https://registry.yarnpkg.com/path-is-absolute/-/path-is-absolute-1.0.1.tgz#174b9268735534ffbc7ace6bf53a5a9e1b5c5f5f"
   integrity sha1-F0uSaHNVNP+8es5r9TpanhtcX18=
 
-react-native-blob-util@^0.13.7:
-  version "0.13.7"
-  resolved "https://registry.yarnpkg.com/react-native-blob-util/-/react-native-blob-util-0.13.7.tgz#e2b5b9d3d12e480c8398d30450cd312879eb78f4"
-  integrity sha512-Eqnigk5CFGYO0CuIgsm5NGU+CtK75EJ4heAed9TG5CQmvTuvvIMvyS+A5noYFPVjnk+99D8jGLSbtOIoT4iqGA==
+react-native-blob-util@^0.13.12:
+  version "0.13.12"
+  resolved "https://registry.yarnpkg.com/react-native-blob-util/-/react-native-blob-util-0.13.12.tgz#7fa8924eefb6a7440cbb1a79bd213c8c29db3673"
+  integrity sha512-dW3ArdArcKY1066u4KV5x7bl+qgIwLmLPXppeonMwhzhi0o5H6A2r2rflLeZeYI3FC66Ot/hp0TOqo9FEv7I4w==
   dependencies:
     base-64 "0.1.0"
     glob "^7.1.6"
