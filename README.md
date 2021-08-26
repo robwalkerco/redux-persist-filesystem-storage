@@ -3,7 +3,7 @@
 [![npm version](https://img.shields.io/npm/v/redux-persist-filesystem-storage.svg?style=flat-square)](https://www.npmjs.com/package/redux-persist-filesystem-storage)
 [![npm downloads](https://img.shields.io/npm/dt/redux-persist-filesystem-storage.svg?style=flat-square)](https://www.npmjs.com/package/redux-persist-filesystem-storage)
 
-Storage adaptor to use [react-native-fetch-blob](https://github.com/wkh237/react-native-fetch-blob) with [redux-persist](https://github.com/rt2zz/redux-persist), by implementing the needed methods: `setItem`, `getItem`, `removeItem`, `getAllKeys` and `clear`.
+Storage adaptor to use [react-native-blob-util](https://github.com/RonRadtke/react-native-blob-util) with [redux-persist](https://github.com/rt2zz/redux-persist), by implementing the needed methods: `setItem`, `getItem`, `removeItem`, `getAllKeys` and `clear`.
 
 This storage can be used on Android to prevent issues with the storage limitations in the RN AsyncStorage implementation. (See [redux-persist#199](https://github.com/rt2zz/redux-persist/issues/199), [redux-persist#284](https://github.com/rt2zz/redux-persist/issues/284))
 
@@ -21,13 +21,8 @@ or, for React Native 0.59 and below:
 yarn add redux-persist-filesystem-storage@1
 ```
 
-Then, as [rn-fetch-blob](https://github.com/joltup/rn-fetch-blob) is a dependency of this project, we need to ensure its linked with
+Then, as [react-native-blob-util](https://github.com/RonRadtke/react-native-blob-util) is a dependency of this project, it will also need setting up as its [their installation docs](https://github.com/RonRadtke/react-native-blob-util#installation).
 
-```
-react-native link rn-fetch-blob
-```
-
-(or check [their docs](https://github.com/joltup/rn-fetch-blob#user-content-installation)).
 
 ## usage
 
