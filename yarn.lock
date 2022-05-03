@@ -79,10 +79,10 @@
   "resolved" "https://registry.npmjs.org/path-is-absolute/-/path-is-absolute-1.0.1.tgz"
   "version" "1.0.1"
 
-"react-native-blob-util@^0.15.0":
-  "integrity" "sha512-hXUoh1eHe25sREQkblpXGQKe1rr8uE1QgEVQIBeF4MbCfscPOCB6YYlsQ9PvJp0dXHCE/H1g//WvkM7wQukJeQ=="
-  "resolved" "https://registry.npmjs.org/react-native-blob-util/-/react-native-blob-util-0.15.0.tgz"
-  "version" "0.15.0"
+"react-native-blob-util@^0.16.0":
+  "integrity" "sha512-Ouyvw3ObMikEK5c2BW5WvcAsLmED7GuSm6CDmTPse0qTn43H3O8XL3kZEmrf2A4w1QoSvhy8v0IuADm/kaLTcg=="
+  "resolved" "https://registry.npmjs.org/react-native-blob-util/-/react-native-blob-util-0.16.0.tgz"
+  "version" "0.16.0"
   dependencies:
     "base-64" "0.1.0"
     "glob" "^7.1.6"
